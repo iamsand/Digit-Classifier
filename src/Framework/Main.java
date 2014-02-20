@@ -17,11 +17,13 @@ public class Main {
 
 	// ------------------------------ //
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
+		Tester.init();
 		CandidateManager cm = null;
 		Scanner sc = new Scanner(System.in);
 
 		while (true) {
+			// TODO: is there a better way to do this?
 			String s = sc.next();
 			String[] splits = s.split("\\s+");
 			if (splits[0] == list && splits.length == 2 && splits[1].matches("-?\\d+")) {

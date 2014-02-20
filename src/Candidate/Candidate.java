@@ -4,56 +4,97 @@ import java.util.Random;
 
 import Framework.Tester;
 
+// TODO: Currently all weights are in (-1,1). I'm not sure if this is correct. Need to verify.
 public class Candidate implements Comparable<Candidate> {
 
-	// 28*28 -> midNodes
+	// Weights of edges from (28*28) -> (Hidden Nodes).
 	public double[][]			w1;
-	// midNodes -> 10
+	// Weights of edges from (Hidden Nodes) -> (10).
 	public double[][]			w2;
+	// Weights of edges from (bias) -> (Hidden Nodes).
+	public double[]			b1;
+	// Weights of edges from (bias) -> (10).
+	public double[]			b2;
+	public int					numHidNode;
 	public int					fit;
 
-	private static double	MUTATION_THRESHHOLD	= 0;
-	private static Random	rand						= new Random();
+	private static double	REG_MUT_THRESH		= 0;
+	private static double	BIAS_MUT_THRESH	= 0;
+	private static Random	rand					= new Random();
 
-	public void setMut(double d) {
-		MUTATION_THRESHHOLD = d;
+	public void setRegMut(double d) {
+		if (d < 0 || d > 0) {
+			System.out.println("Invalid Range.");
+			return;
+		}
+		REG_MUT_THRESH = d;
 	}
 
-	public Candidate(int midNodes) {
-		w1 = new double[28 * 28][midNodes];
+	public void setBiasMut(double d) {
+		if (d < 0 || d > 0) {
+			System.out.println("Invalid Range.");
+			return;
+		}
+		BIAS_MUT_THRESH = d;
+	}
+
+	// This is making a new random Candidate.
+	public Candidate(int numHidNode) {
+		this.numHidNode = numHidNode;
+		w1 = new double[28 * 28][numHidNode];
 		for (int r = 0; r < 28 * 28; r++)
-			for (int c = 0; c < midNodes; c++)
+			for (int c = 0; c < numHidNode; c++)
 				w1[r][c] = rand.nextDouble();
-		w2 = new double[midNodes][10];
-		for (int r = 0; r < midNodes; r++)
+		w2 = new double[numHidNode][10];
+		for (int r = 0; r < numHidNode; r++)
 			for (int c = 0; c < 10; c++)
 				w2[r][c] = rand.nextDouble();
+		b1 = new double[numHidNode];
+		for (int i = 0; i < numHidNode; i++)
+			b1[i] = rand.nextDouble();
+		b2 = new double[10];
+		for (int i = 0; i < numHidNode; i++)
+			b2[i] = rand.nextDouble();
 		calcFit();
 	}
 
+	// This allows us to load a Candidate from a file.
 	public Candidate(String s) {
+		// TODO
 		calcFit();
 	}
 
+	// This is what breeds two Candidates.
 	public Candidate(Candidate p1, Candidate p2) {
-		int midNodes = p1.w1[0].length;
-		w1 = new double[28 * 28][midNodes];
-		w2 = new double[midNodes][10];
-
+		int numHidNode = p1.numHidNode;
+		w1 = new double[28 * 28][numHidNode];
 		for (int r = 0; r < 28 * 28; r++)
-			for (int c = 0; c < midNodes; c++) {
+			for (int c = 0; c < numHidNode; c++) {
 				w1[r][c] = (p1.w1[r][c] + p2.w1[r][c]) / 2;
-				if (rand.nextDouble() < MUTATION_THRESHHOLD)
+				if (rand.nextDouble() < REG_MUT_THRESH)
 					w1[r][c] += (1 - 2 * rand.nextDouble());
-
 			}
-		for (int r = 0; r < midNodes; r++)
+		w2 = new double[numHidNode][10];
+		for (int r = 0; r < numHidNode; r++)
 			for (int c = 0; c < 10; c++) {
 				w2[r][c] = (p1.w2[r][c] + p2.w2[r][c]) / 2;
-				if (rand.nextDouble() < MUTATION_THRESHHOLD)
+				if (rand.nextDouble() < REG_MUT_THRESH)
 					w2[r][c] += (1 - 2 * rand.nextDouble());
 
 			}
+		b1 = new double[numHidNode];
+		for (int i = 0; i < numHidNode; i++) {
+			b1[i] = (p1.b1[i] + p2.b1[i]) / 2;
+			if (rand.nextDouble() < BIAS_MUT_THRESH)
+				b1[i] += (1 - 2 * rand.nextDouble());
+		}
+		b2 = new double[10];
+		for (int i = 0; i < 10; i++) {
+			b2[i] = (p1.b2[i] + p2.b2[i]) / 2;
+			if (rand.nextDouble() < BIAS_MUT_THRESH)
+				b2[i] += (1 - 2 * rand.nextDouble());
+		}
+		// TODO: maybe something needs to be put in about normalizing since currently weights may be < -1 or >1
 		calcFit();
 	}
 

@@ -2,7 +2,6 @@ package Candidate;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import Framework.Tester;
 
 public class CandidateManager {
 
@@ -16,17 +15,29 @@ public class CandidateManager {
 
 	public CandidateManager(int midNodes, int n) {
 		this.midNodes = midNodes;
-		Tester.init();
 		cands = new ArrayList<Candidate>();
 		while (cands.size() != n)
 			cands.add(new Candidate(midNodes));
 		gen = 0;
 	}
 
+	public void add(Candidate c) {
+		cands.add(c);
+	}
+
+	public void remove(int n) {
+		if (n > cands.size()) {
+			System.out.println("Given n is greater than size!");
+			return;
+		}
+		for (int i = 0; i < n; i++)
+			cands.remove(cands.size() - 1);
+	}
+
 	// This replaces the current cands with a new one.
 	// Breed them with roulette.
 	public void breed() {
-
+		// TODO
 	}
 
 	public void runGen() {
