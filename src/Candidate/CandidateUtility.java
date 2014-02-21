@@ -14,6 +14,7 @@ public class CandidateUtility {
 			out.print(i + " ");
 			for (int j = 0; j < c.w1[0].length; j++)
 				out.print(c.w1[i][j] + " ");
+			out.println();
 		}
 		out.println();
 
@@ -22,6 +23,7 @@ public class CandidateUtility {
 			out.print(i + " ");
 			for (int j = 0; j < c.w2[0].length; j++)
 				out.print(c.w2[i][j] + " ");
+			out.println();
 		}
 		out.println();
 

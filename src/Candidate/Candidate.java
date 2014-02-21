@@ -8,31 +8,31 @@ import Framework.Tester;
 public class Candidate implements Comparable<Candidate> {
 
 	// Weights of edges from (28*28) -> (Hidden Nodes).
-	public double[][]		w1;
+	public double[][]			w1;
 	// Weights of edges from (Hidden Nodes) -> (10).
-	public double[][]		w2;
+	public double[][]			w2;
 	// Weights of edges from (bias) -> (Hidden Nodes).
 	public double[]			b1;
 	// Weights of edges from (bias) -> (10).
 	public double[]			b2;
-	public int				numHidNode;
-	public int				fit;
-	public double			prob;
+	public int					numHidNode;
+	public int					fit;
+	public double				prob;
 
-	private static double	REG_MUT_THRESH	= 0;
+	private static double	REG_MUT_THRESH		= 0;
 	private static double	BIAS_MUT_THRESH	= 0;
-	private static Random	rand			= new Random();
+	private static Random	rand					= new Random();
 
-	public void setRegMut(double d) {
-		if (d < 0 || d > 0) {
+	public static void setRegMut(double d) {
+		if (d < 0 || d > 1) {
 			System.out.println("Invalid Range.");
 			return;
 		}
 		REG_MUT_THRESH = d;
 	}
 
-	public void setBiasMut(double d) {
-		if (d < 0 || d > 0) {
+	public static void setBiasMut(double d) {
+		if (d < 0 || d > 1) {
 			System.out.println("Invalid Range.");
 			return;
 		}
@@ -54,7 +54,7 @@ public class Candidate implements Comparable<Candidate> {
 		for (int i = 0; i < numHidNode; i++)
 			b1[i] = rand.nextDouble();
 		b2 = new double[10];
-		for (int i = 0; i < numHidNode; i++)
+		for (int i = 0; i < 10; i++)
 			b2[i] = rand.nextDouble();
 		calcFit();
 	}
@@ -67,15 +67,15 @@ public class Candidate implements Comparable<Candidate> {
 
 	// This is what breeds two Candidates.
 	public Candidate(Candidate p1, Candidate p2) {
-		int numHidNode = p1.numHidNode;
-		w1 = new double[28 * 28][numHidNode];
+		this.numHidNode = p1.numHidNode;
+		this.w1 = new double[28 * 28][numHidNode];
 		for (int r = 0; r < 28 * 28; r++)
 			for (int c = 0; c < numHidNode; c++) {
 				w1[r][c] = (p1.w1[r][c] + p2.w1[r][c]) / 2;
 				if (rand.nextDouble() < REG_MUT_THRESH)
 					w1[r][c] += (1 - 2 * rand.nextDouble());
 			}
-		w2 = new double[numHidNode][10];
+		this.w2 = new double[numHidNode][10];
 		for (int r = 0; r < numHidNode; r++)
 			for (int c = 0; c < 10; c++) {
 				w2[r][c] = (p1.w2[r][c] + p2.w2[r][c]) / 2;
@@ -83,13 +83,13 @@ public class Candidate implements Comparable<Candidate> {
 					w2[r][c] += (1 - 2 * rand.nextDouble());
 
 			}
-		b1 = new double[numHidNode];
+		this.b1 = new double[numHidNode];
 		for (int i = 0; i < numHidNode; i++) {
 			b1[i] = (p1.b1[i] + p2.b1[i]) / 2;
 			if (rand.nextDouble() < BIAS_MUT_THRESH)
 				b1[i] += (1 - 2 * rand.nextDouble());
 		}
-		b2 = new double[10];
+		this.b2 = new double[10];
 		for (int i = 0; i < 10; i++) {
 			b2[i] = (p1.b2[i] + p2.b2[i]) / 2;
 			if (rand.nextDouble() < BIAS_MUT_THRESH)
@@ -106,6 +106,6 @@ public class Candidate implements Comparable<Candidate> {
 
 	@Override
 	public int compareTo(Candidate c) {
-		return this.fit - c.fit;
+		return c.fit - this.fit;
 	}
 }

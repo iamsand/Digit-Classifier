@@ -63,8 +63,8 @@ public class Tester {
 
 	public static int run(Candidate c) {
 		int count = 0;
-		// TODO: Only testing 5 for now. Change this when debugged.
-		for (int i = 0; i < 5; i++)
+		// TODO: Only testing 100 for now. Change this when debugged.
+		for (int i = 0; i < 100; i++)
 			if (tst(c, i))
 				count++;
 		return count;

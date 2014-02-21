@@ -7,21 +7,22 @@ import java.util.Random;
 public class CandidateManager {
 
 	public ArrayList<Candidate>	cands;
-	public int					midNodes;
-	public int					gen;
+	public int							midNodes;
+	public int							gen;
 
-	public static Random		rand	= new Random();
+	public static Random				rand	= new Random();
 
 	public CandidateManager(int midNodes) {
 		this(midNodes, 0);
 	}
 
 	public CandidateManager(int midNodes, int n) {
+		gen = 0;
 		this.midNodes = midNodes;
 		cands = new ArrayList<Candidate>();
 		while (cands.size() != n)
 			cands.add(new Candidate(midNodes));
-		gen = 0;
+		Collections.sort(cands);
 	}
 
 	public void add(Candidate c) {
@@ -54,9 +55,11 @@ public class CandidateManager {
 			Candidate[] parents = new Candidate[2];
 			for (int i = 0; i < 2; i++) {
 				double r = rand.nextDouble();
-				for (int j = 0; j < prob.length - 1; j++) 
-					if (r >= prob[j] && r < prob[j + 1]) 
-						parents[i] = cands.get(j);				
+				for (int j = 0; j < prob.length - 1; j++)
+					if (r >= prob[j] && r < prob[j + 1])
+						parents[i] = cands.get(j);
+				if (parents[i] == null)
+					parents[i] = cands.get(cands.size() - 1);
 			}
 			newcands.add(new Candidate(parents[0], parents[1]));
 		}
