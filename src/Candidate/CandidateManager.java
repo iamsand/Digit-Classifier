@@ -2,12 +2,15 @@ package Candidate;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 public class CandidateManager {
 
 	public ArrayList<Candidate>	cands;
-	public int							midNodes;
-	public int							gen;
+	public int					midNodes;
+	public int					gen;
+
+	public static Random		rand	= new Random();
 
 	public CandidateManager(int midNodes) {
 		this(midNodes, 0);
@@ -34,10 +37,30 @@ public class CandidateManager {
 			cands.remove(cands.size() - 1);
 	}
 
-	// This replaces the current cands with a new one.
-	// Breed them with roulette.
+	// This selects parents by roulette. I think it is quite expensive.
 	public void breed() {
-		// TODO
+		double fitsum = 0;
+		double probsum = 0;
+		double[] prob = new double[cands.size()];
+		for (int i = 0; i < cands.size(); i++)
+			fitsum += cands.get(i).fit;
+		for (int i = 0; i < cands.size(); i++) {
+			prob[i] = probsum += cands.get(i).fit / fitsum;
+			probsum += prob[i];
+		}
+
+		ArrayList<Candidate> newcands = new ArrayList<Candidate>();
+		while (newcands.size() < cands.size()) {
+			Candidate[] parents = new Candidate[2];
+			for (int i = 0; i < 2; i++) {
+				double r = rand.nextDouble();
+				for (int j = 0; j < prob.length - 1; j++) 
+					if (r >= prob[j] && r < prob[j + 1]) 
+						parents[i] = cands.get(j);				
+			}
+			newcands.add(new Candidate(parents[0], parents[1]));
+		}
+		cands = newcands;
 	}
 
 	public void runGen() {

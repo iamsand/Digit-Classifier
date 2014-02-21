@@ -8,19 +8,20 @@ import Framework.Tester;
 public class Candidate implements Comparable<Candidate> {
 
 	// Weights of edges from (28*28) -> (Hidden Nodes).
-	public double[][]			w1;
+	public double[][]		w1;
 	// Weights of edges from (Hidden Nodes) -> (10).
-	public double[][]			w2;
+	public double[][]		w2;
 	// Weights of edges from (bias) -> (Hidden Nodes).
 	public double[]			b1;
 	// Weights of edges from (bias) -> (10).
 	public double[]			b2;
-	public int					numHidNode;
-	public int					fit;
+	public int				numHidNode;
+	public int				fit;
+	public double			prob;
 
-	private static double	REG_MUT_THRESH		= 0;
+	private static double	REG_MUT_THRESH	= 0;
 	private static double	BIAS_MUT_THRESH	= 0;
-	private static Random	rand					= new Random();
+	private static Random	rand			= new Random();
 
 	public void setRegMut(double d) {
 		if (d < 0 || d > 0) {
@@ -94,7 +95,8 @@ public class Candidate implements Comparable<Candidate> {
 			if (rand.nextDouble() < BIAS_MUT_THRESH)
 				b2[i] += (1 - 2 * rand.nextDouble());
 		}
-		// TODO: maybe something needs to be put in about normalizing since currently weights may be < -1 or >1
+		// TODO: maybe something needs to be put in about normalizing since
+		// currently weights may be < -1 or >1
 		calcFit();
 	}
 

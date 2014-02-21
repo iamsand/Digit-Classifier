@@ -7,13 +7,13 @@ import Candidate.CandidateManager;
 public class Main {
 
 	// ---------- COMMANDS ---------- //
-	final static String	list		= "ls";	// ls [num ranks]
-	final static String	load		= "l";	//
+	final static String	list	= "ls"; // ls [num ranks]
+	final static String	load	= "l";	//
 	final static String	makeNew	= "n";	// n [num hidden nodes]
-	final static String	save		= "s";	//
+	final static String	save	= "s";	//
 	final static String	setMut	= "m";
 	final static String	run		= "r";	// r [num gens]
-	final static String	quit		= "q";	// q
+	final static String	quit	= "q";	// q
 
 	// ------------------------------ //
 
