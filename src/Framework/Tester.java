@@ -29,8 +29,7 @@ public class Tester {
 
 	// This basically runs the neural network calculation.
 	public static boolean tst(Candidate c, int index) {
-		// Note that we don't need input nodes since this is exactly given in
-		// tstData.
+		// Note that we don't need input nodes since this is exactly given in tstData.
 		double[] hiddenNodes = new double[c.numHidNode];
 		double[] outputNodes = new double[10];
 		// Calculation the hidden nodes
@@ -47,7 +46,7 @@ public class Tester {
 		for (int i = 0; i < 10; i++) {
 			outputNodes[i] = 0;
 			for (int j = 0; j < hiddenNodes.length; j++)
-				outputNodes[i] += c.w2[j][i] * tstData[index][j + 1] / 255.0;
+				outputNodes[i] += c.w2[j][i] * hiddenNodes[j];
 			outputNodes[i] += c.b2[i];
 			outputNodes[i] = sigmoid(outputNodes[i]);
 			if (outputNodes[i] > max) {
@@ -64,14 +63,15 @@ public class Tester {
 	public static int run(Candidate c) {
 		int count = 0;
 		// TODO: Only testing 100 for now. Change this when debugged.
-		for (int i = 0; i < 100; i++)
+		for (int i = 0; i < 1000; i++)
 			if (tst(c, i))
 				count++;
 		return count;
 	}
 
 	// TODO: There are various ways to speed this up.
-	// See http://stackoverflow.com/questions/2887815/speeding-up-math-calculations-in-java
+	// See
+	// http://stackoverflow.com/questions/2887815/speeding-up-math-calculations-in-java
 	public static double sigmoid(double x) {
 		if (x < -10)
 			return 0;

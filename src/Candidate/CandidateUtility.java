@@ -6,8 +6,8 @@ import java.io.FileWriter;
 
 // This class allows candidates to be saved.
 public class CandidateUtility {
-	public void save(Candidate c, String name, String fileName) throws Exception {
-		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
+	public static void save(Candidate c, String name, String fileName) throws Exception {
+		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(fileName+".txt")));
 		out.println(name);
 		out.println("w1");
 		for (int i = 0; i < c.w1.length; i++) {
