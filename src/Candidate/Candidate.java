@@ -19,8 +19,8 @@ public class Candidate implements Comparable<Candidate> {
 	public int					fit;
 	public double				prob;
 
-	private static double	REG_MUT_THRESH		= 0;
-	private static double	BIAS_MUT_THRESH	= 0;
+	private static double	REG_MUT_THRESH		= .05;
+	private static double	BIAS_MUT_THRESH	= .05;
 	private static Random	rand					= new Random();
 
 	public static void setRegMut(double d) {

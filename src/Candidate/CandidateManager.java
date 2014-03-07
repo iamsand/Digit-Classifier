@@ -10,7 +10,8 @@ public class CandidateManager {
 	public int					midNodes;
 	public int					gen;
 
-	public static Random		rand	= new Random();
+	public final static int		INCUMBENT	= 3;
+	public static Random		rand		= new Random();
 
 	public CandidateManager(int midNodes) {
 		this(midNodes, 0);
@@ -22,7 +23,7 @@ public class CandidateManager {
 		cands = new ArrayList<Candidate>();
 		while (cands.size() != numCand) {
 			cands.add(new Candidate(midNodes));
-			System.out.println("sz " + cands.size());// DEBUG
+			System.out.println("building... " + (cands.size() - 1));// DEBUG
 		}
 		Collections.sort(cands);
 	}
@@ -46,18 +47,16 @@ public class CandidateManager {
 		double[] prob = new double[cands.size() + 1];
 		for (int i = 0; i < cands.size(); i++)
 			fitsum += cands.get(i).fit;
-		prob[0] = cands.get(1).fit / fitsum;
+		prob[0] = cands.get(0).fit / fitsum;
 		for (int i = 1; i < cands.size(); i++)
 			prob[i] = prob[i - 1] + cands.get(i).fit / fitsum;
 		prob[prob.length - 1] = 1.01; // sentinel
 
-		// System.out.println("debug prt probs");
-		// for (int i = 0 ;i< prob.length;i++){
-		// System.out.print(prob[i] + " ");
-		// }
-		// System.out.println();
-
 		ArrayList<Candidate> newcands = new ArrayList<Candidate>();
+		// Here we add incumbents to guarantee the population doesn't get worse.
+		for (int i = 0; i < INCUMBENT; i++)
+			newcands.add(cands.get(i));
+
 		while (newcands.size() < cands.size()) {
 			Candidate[] parents = new Candidate[2];
 			for (int i = 0; i < 2; i++) {
@@ -71,7 +70,7 @@ public class CandidateManager {
 						parents[i] = cands.get(j);
 			}
 			newcands.add(new Candidate(parents[0], parents[1]));
-			System.out.println("sz " + newcands.size()); // DEBUG
+			System.out.println("building... " + (newcands.size() - 1)); // DEBUG
 		}
 		cands = newcands;
 	}

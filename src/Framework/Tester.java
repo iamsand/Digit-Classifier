@@ -2,6 +2,7 @@ package Framework;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.Random;
 
 import Candidate.Candidate;
 
@@ -9,9 +10,14 @@ import Candidate.Candidate;
 public class Tester {
 
 	// [index], [first is ID, rest is pixels as a vector]
-	static int[][]		tstData;
-	final static String	fileLoc	= "train.csv";
+	public static int[][]		tstData;
+	public final static String	fileLoc	= "train.csv";
 
+	// This is the number of datas to test for each candidate.
+	public final static int NUM_TEST = 1000;
+	
+	public static Random rand = new Random();
+	
 	// This methods reads the train.csv so that we can access it as an int[][].
 	public static void init() throws Exception {
 		tstData = new int[42000][1 + 28 * 28];
@@ -32,13 +38,14 @@ public class Tester {
 		// Note that we don't need input nodes since this is exactly given in tstData.
 		double[] hiddenNodes = new double[c.numHidNode];
 		double[] outputNodes = new double[10];
-		// Calculation the hidden nodes
+		// Calculation for the hidden nodes
 		for (int i = 0; i < hiddenNodes.length; i++) {
 			hiddenNodes[i] = 0;
 			for (int j = 0; j < 28 * 28; j++)
 				hiddenNodes[i] += c.w1[j][i] * tstData[index][j + 1] / 255.0;
 			hiddenNodes[i] += c.b1[i];
-			hiddenNodes[i] = sigmoid(hiddenNodes[i]);
+			// hiddenNodes[i] = sigmoid(hiddenNodes[i]); // TODO: ???
+			// System.out.print(i + " " + hiddenNodes[i] + " "); // DEBUG
 		}
 		double max = Double.MIN_VALUE;
 		double maxInd = -1;
@@ -48,24 +55,25 @@ public class Tester {
 			for (int j = 0; j < hiddenNodes.length; j++)
 				outputNodes[i] += c.w2[j][i] * hiddenNodes[j];
 			outputNodes[i] += c.b2[i];
-			outputNodes[i] = sigmoid(outputNodes[i]);
+			// System.out.print(i + " " + outputNodes[i] + " "); // DEBUG
 			if (outputNodes[i] > max) {
 				max = outputNodes[i];
 				maxInd = i;
 			}
-
 		}
-		if (maxInd == tstData[index][0])
-			return true;
-		return false;
+		// System.out.println(); // DEBUG
+		return maxInd == tstData[index][0];
 	}
 
 	public static int run(Candidate c) {
+		// System.out.println("Running test for " + c); // DEBUG
 		int count = 0;
-		// TODO: Only testing 100 for now. Change this when debugged.
-		for (int i = 0; i < 1000; i++)
-			if (tst(c, i))
+		// TODO: Not testing whole data set. Change this when debugged.
+		for (int i = 0; i < NUM_TEST; i++) {
+			// System.out.println("Testing sample " + i); // DEBUG
+			if (tst(c, rand.nextInt(42000)))
 				count++;
+		}
 		return count;
 	}
 
