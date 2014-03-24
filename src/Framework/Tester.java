@@ -21,7 +21,7 @@ public class Tester {
 	// This methods reads the train.csv so that we can access it as an int[][].
 	public static void init() throws Exception {
 		tstData = new int[42000][1 + 28 * 28];
-		BufferedReader br = new BufferedReader(new FileReader("res/" + fileLoc));
+		BufferedReader br = new BufferedReader(new FileReader("res\\" + fileLoc));
 		String s = br.readLine();
 		String[] splts = null;
 		for (int i = 0; i < 42000; i++) {
@@ -44,9 +44,10 @@ public class Tester {
 			for (int j = 0; j < 28 * 28; j++)
 				hiddenNodes[i] += c.w1[j][i] * tstData[index][j + 1] / 255.0;
 			hiddenNodes[i] += c.b1[i];
-			// hiddenNodes[i] = sigmoid(hiddenNodes[i]); // TODO: ???
+			hiddenNodes[i] = sigmoid(hiddenNodes[i]);
 			// System.out.print(i + " " + hiddenNodes[i] + " "); // DEBUG
 		}
+		// System.out.println(); // DEBUG
 		double max = Double.MIN_VALUE;
 		double maxInd = -1;
 		// Calculation for output nodes

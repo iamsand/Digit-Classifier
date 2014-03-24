@@ -22,8 +22,8 @@ public class CandidateManager {
 		this.midNodes = midNodes;
 		cands = new ArrayList<Candidate>();
 		while (cands.size() != numCand) {
+			System.out.println("building... " + cands.size());
 			cands.add(new Candidate(midNodes));
-			System.out.println("building... " + (cands.size() - 1));// DEBUG
 		}
 		Collections.sort(cands);
 	}
@@ -58,6 +58,7 @@ public class CandidateManager {
 			newcands.add(cands.get(i));
 
 		while (newcands.size() < cands.size()) {
+			System.out.println("building... " + newcands.size());
 			Candidate[] parents = new Candidate[2];
 			for (int i = 0; i < 2; i++) {
 				double r = rand.nextDouble();
@@ -70,7 +71,6 @@ public class CandidateManager {
 						parents[i] = cands.get(j);
 			}
 			newcands.add(new Candidate(parents[0], parents[1]));
-			System.out.println("building... " + (newcands.size() - 1)); // DEBUG
 		}
 		cands = newcands;
 	}

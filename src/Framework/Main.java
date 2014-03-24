@@ -9,8 +9,8 @@ import Candidate.CandidateUtility;
 public class Main {
 
 	// -- HardCoded stuff -- //
-	final static int	NUM_MID_NODES	= 75;
-	final static int	NUM_CANDS		= 25;
+	final static int	NUM_MID_NODES	= 15;
+	final static int	NUM_CANDS		= 50;
 
 	// ---------- COMMANDS ---------- //
 	// final static String list = "ls"; // ls [num ranks]
